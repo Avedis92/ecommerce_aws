@@ -4,6 +4,7 @@ import {
   alertMessageType,
   NavItemEnum,
   MODAL_TYPE,
+  ISignUpUser,
 } from "../types";
 
 export const alertMessageState = atom<alertMessageType | null>({
@@ -39,4 +40,9 @@ export const userCartCountState = atom<number>({
 export const menuShownState = atom<boolean>({
   key: "menuShownState",
   default: false,
+});
+
+export const signUpUserState = atom<ISignUpUser | undefined>({
+  key: "signUpUserState",
+  default: undefined,
 });

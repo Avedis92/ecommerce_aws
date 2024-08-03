@@ -1,10 +1,10 @@
 import { IInput, IInputError } from "../../../shared/types";
 
 export const validateSignInForm = (
-  inputForm: Omit<IInput, "confirmPassword" | "username">,
+  inputForm: Omit<IInput, "confirmPassword" | "username" | "code">,
   initialInputErrors: Omit<
     IInputError,
-    "confirmPasswordError" | "usernameError"
+    "confirmPasswordError" | "usernameError" | "codeError"
   >
 ) => {
   const errorInputFields = { ...initialInputErrors };

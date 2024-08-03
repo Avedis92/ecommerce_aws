@@ -4,6 +4,7 @@ import Navbar from "./components/organisms/navbar";
 import Modal from "./components/molecules/modalContainer";
 import SignIn from "./components/pages/signin";
 import SignUp from "./components/pages/signup";
+import Alert from "./components/molecules/alert";
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
         <Route path="/signUp" element={<SignUp />} />
       </Routes>
       <Modal />
+      <Alert />
     </>
   );
 };

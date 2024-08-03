@@ -1,13 +1,12 @@
 import { IInput, IInputError } from "../../../shared/types";
 
+type SignupInputError = Omit<IInputError, "codeError">;
+
 export const validateSignUpForm = (
   inputForm: IInput,
-  initialInputErrors: Required<IInputError>
-): Required<IInputError> => {
+  initialInputErrors: Required<SignupInputError>
+): Required<SignupInputError> => {
   const errorInputFields = { ...initialInputErrors };
-  if (!inputForm.username) {
-    errorInputFields.usernameError = "Username is required";
-  }
   if (!inputForm.email) {
     errorInputFields.emailError = "Email is required";
   }

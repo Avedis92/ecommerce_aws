@@ -18,7 +18,7 @@ export interface IField {
   placeholder: string;
   value: string;
   error?: string;
-  type: "text" | "password";
+  type: "text" | "password" | "number";
   onChange: (inputValue: string) => void;
 }
 
@@ -74,13 +74,14 @@ export interface IInput {
   email: string;
   password: string;
   confirmPassword?: string;
+  code?: string;
 }
 
 export interface IInputError {
-  usernameError?: string;
   emailError: string;
   passwordError: string;
   confirmPasswordError?: string;
+  codeError?: string;
 }
 
 export enum MODAL_TYPE {
@@ -88,6 +89,12 @@ export enum MODAL_TYPE {
   SIGNIN,
   SIGNOUT,
   DENIED_ACCESS,
+  EMAIL_VERIFICATION,
+}
+
+export interface IUser {
+  username: string;
+  isVerified: boolean;
 }
 
 /* export interface ICart {
@@ -105,4 +112,12 @@ export enum MODAL_TYPE {
 export interface AuthUserExtraInfoType {
   username: string;
   isAdmin: boolean;
+}
+interface ISingUpUserProps {
+  username: string;
+  userSub: string;
+  userConfirmed: boolean;
+}
+export interface ISignUpUser {
+  user: ISingUpUserProps;
 }
