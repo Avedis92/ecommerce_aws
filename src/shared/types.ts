@@ -78,6 +78,7 @@ export interface IInput {
 }
 
 export interface IInputError {
+  usernameError?: string;
   emailError: string;
   passwordError: string;
   confirmPasswordError?: string;
@@ -120,4 +121,11 @@ interface ISingUpUserProps {
 }
 export interface ISignUpUser {
   user: ISingUpUserProps;
+}
+
+export interface IAuthUser {
+  username: string;
+  profileName: string;
+  isAdmin: boolean;
+  isEmailConfirmed: boolean;
 }
