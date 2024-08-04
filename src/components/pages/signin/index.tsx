@@ -1,21 +1,20 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { CognitoUser, AuthenticationDetails } from "amazon-cognito-identity-js";
 import Field from "../../organisms/field";
 import AuthContainer from "../../molecules/authContainer";
 import { initialForm, initialError } from "./constant";
 import { validateSignInForm } from "./helper";
 import { allFieldsAreEmpty } from "../../../shared/helpers";
-/* import { validateSignInForm } from "./helpers";
-import { allFieldsAreEmpty } from "../../../shared/helpers";
 import useAlert from "../../../hooks/useAlert";
-import useModal from "../../../hooks/useModal"; */
-import { MODAL_TYPE } from "../../../shared/types";
 import useModal from "../../../hooks/useModal";
+import { MODAL_TYPE } from "../../../shared/types";
+import { userPool } from "../../../shared/config";
 
 const SignIn = () => {
   const [signInForm, setSignInForm] = useState(initialForm);
   const [errorForm, setErrorForm] = useState(initialError);
-  /* const { showErrorMessage } = useAlert(); */
+  const { showErrorMessage } = useAlert();
   const { showModal } = useModal();
   const navigate = useNavigate();
 
@@ -39,21 +38,34 @@ const SignIn = () => {
       setErrorForm(errorFields);
       return;
     } else {
-      showModal(MODAL_TYPE.SIGNIN);
-      setSignInForm(initialForm);
-      setErrorForm(initialError);
-      /* try {
-        await signInWithEmailAndPassword(
-          auth,
-          signInForm.email,
-          signInForm.password
-        );
-        showModal(MODAL_TYPE.SIGNIN);
-        setSignInForm(initialForm);
-        setErrorForm(initialError);
-      } catch (e) {
-        showErrorMessage("User was not successfully signed in");
-      } */
+      const userData = {
+        Username: signInForm.email,
+        Pool: userPool,
+      };
+      const cognitoUser = new CognitoUser(userData);
+      const authDetails = new AuthenticationDetails({
+        Username: signInForm.email,
+        Password: signInForm.password,
+      });
+      cognitoUser.authenticateUser(authDetails, {
+        onSuccess: (result) => {
+          console.log(result);
+          showModal(MODAL_TYPE.SIGNIN);
+          setSignInForm(initialForm);
+          setErrorForm(initialError);
+          cognitoUser.getUserAttributes((err, data) => {
+            if (err) {
+              console.error(err);
+              return;
+            }
+            console.log(data);
+          });
+        },
+        onFailure: (err) => {
+          console.error(err);
+          showErrorMessage("User was not successfully signed in");
+        },
+      });
     }
   };
 

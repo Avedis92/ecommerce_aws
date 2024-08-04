@@ -19,7 +19,7 @@ const SignUpModal = () => {
         hover:scale-105 active:scale-90"
         onClick={handleGoPage}
       >
-        Go back to home page
+        Go back to home page and sign in
       </button>
     </div>
   );
