@@ -50,6 +50,7 @@ const useAuth = () => {
     extraAttributes: CognitoUserAttribute[]
   ) => {
     Pool.signUp(email, password, extraAttributes, [], (err, data) => {
+      console.log(extraAttributes);
       if (err) {
         showErrorMessage("User was not successfully signed Up");
         console.error(err);
@@ -93,18 +94,30 @@ const useAuth = () => {
     };
     const cognitoUser = new CognitoUser(userData);
     cognitoUser.signOut();
+    showModal(MODAL_TYPE.SIGNOUT);
+    setAuthUser(null);
   };
 
   useEffect(() => {
+    // this code is used mainly during refresh case
+    // if the user is already authenticated, we check for the current authenticated user
+    // if the user exists, we get the the user's session.
+    // if the session is valid we can then retrieve user's attributes and display the info on th UI
     if (!authUser) {
       const cognitoUser = Pool.getCurrentUser();
       if (cognitoUser) {
-        cognitoUser.getUserAttributes((err, data) => {
+        cognitoUser.getSession((err: Error) => {
           if (err) {
             showErrorMessage(err.message);
             return;
           }
-          setAuthUser(createAuthUser(data!));
+          cognitoUser.getUserAttributes((err, data) => {
+            if (err) {
+              showErrorMessage(err.message);
+              return;
+            }
+            setAuthUser(createAuthUser(data!));
+          });
         });
       }
     }

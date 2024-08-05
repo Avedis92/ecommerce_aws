@@ -3,8 +3,7 @@ import { isModalShownState, modalTypeState } from "../../../shared/recoil/atom";
 import SignUpModal from "../signUpModal";
 import SignInModal from "../signInModal";
 import VerifyEmailModal from "../emailVerificationModal";
-/* import SignOutModal from "../signOutModal";
-import AccessDeniedModal from "../deniedAccessModal"; */
+import SignOutModal from "../signOutModal";
 import { MODAL_TYPE } from "../../../shared/types";
 
 const ModalContent = () => {
@@ -19,9 +18,9 @@ const ModalContent = () => {
         return <SignInModal />;
       case MODAL_TYPE.EMAIL_VERIFICATION:
         return <VerifyEmailModal />;
-      /* case MODAL_TYPE.SIGNOUT:
+      case MODAL_TYPE.SIGNOUT:
         return <SignOutModal />;
-      case MODAL_TYPE.DENIED_ACCESS:
+      /*case MODAL_TYPE.DENIED_ACCESS:
         return <AccessDeniedModal />; */
       default:
         break;
