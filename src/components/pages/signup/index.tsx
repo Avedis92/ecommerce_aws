@@ -1,25 +1,25 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSetRecoilState } from "recoil";
-import { signUpUserState } from "../../../shared/recoil/atom";
 import AuthContainer from "../../molecules/authContainer";
 import { CognitoUserAttribute } from "amazon-cognito-identity-js";
 import Field from "../../organisms/field";
 import { initialError, initialForm } from "./constant";
-import useAlert from "../../../hooks/useAlert";
 import { allFieldsAreEmpty } from "../../../shared/helpers";
 import { validateSignUpForm } from "./helper";
-import useModal from "../../../hooks/useModal";
-import { MODAL_TYPE } from "../../../shared/types";
-import { userPool } from "../../../shared/config";
+import useAuth from "../../../hooks/useAuth";
 
 const SignUp = () => {
   const navigate = useNavigate();
   const [signUpForm, setSignUpForm] = useState(initialForm);
   const [errorForm, setErrorForm] = useState(initialError);
-  const { showErrorMessage } = useAlert();
-  const { showModal } = useModal();
-  const setSignUpUser = useSetRecoilState(signUpUserState);
+  const { signUp } = useAuth();
+
+  const handleUsernameChange = (username: string) => {
+    setSignUpForm({
+      ...signUpForm,
+      username,
+    });
+  };
 
   const handleEmailChange = (email: string) => {
     setSignUpForm({
@@ -52,32 +52,12 @@ const SignUp = () => {
           Name: "custom:isAdmin",
           Value: "0",
         }),
+        new CognitoUserAttribute({
+          Name: "custom:profileName",
+          Value: `${signUpForm.username}`,
+        }),
       ];
-      userPool.signUp(
-        signUpForm.email,
-        signUpForm.password,
-        extraAttributes,
-        [],
-        (err, data) => {
-          if (err) {
-            showErrorMessage("User was not successfully signed Up");
-            console.error(err);
-          } else {
-            showModal(MODAL_TYPE.EMAIL_VERIFICATION);
-            setSignUpForm(initialForm);
-            setErrorForm(initialError);
-            const signUpUser = {
-              user: {
-                // @ts-ignore
-                username: data?.user.username,
-                userSub: data?.userSub as string,
-                userConfirmed: data?.userConfirmed as boolean,
-              },
-            };
-            setSignUpUser(signUpUser);
-          }
-        }
-      );
+      signUp(signUpForm.email, signUpForm.password, extraAttributes);
     }
   };
 
@@ -92,6 +72,14 @@ const SignUp = () => {
       onClick={navigateToSignIn}
     >
       <form>
+        <Field
+          labelName="Username"
+          type="text"
+          placeholder="Enter username"
+          onChange={handleUsernameChange}
+          value={signUpForm.username}
+          error={errorForm.usernameError}
+        />
         <Field
           labelName="Email"
           type="text"

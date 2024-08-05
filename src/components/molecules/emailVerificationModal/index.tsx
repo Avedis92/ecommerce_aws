@@ -1,23 +1,15 @@
 import { useState } from "react";
-import { useRecoilState } from "recoil";
-import { CognitoUser } from "amazon-cognito-identity-js";
-import { signUpUserState } from "../../../shared/recoil/atom";
-import useModal from "../../../hooks/useModal";
-import useAlert from "../../../hooks/useAlert";
 import Field from "../../organisms/field";
 import { validateEmailVerificationForm } from "./helper";
 import { initialError, initialForm } from "./constant";
-import { userPool } from "../../../shared/config";
-import { MODAL_TYPE, ISignUpUser } from "../../../shared/types";
+import useAuth from "../../../hooks/useAuth";
 
 const VerifyEmailModal = () => {
-  const { showModal } = useModal();
   const [emailVerificationForm, setEmailVerificationForm] =
     useState(initialForm);
   const [emailVerificationFormError, setEmailVerificationFormError] =
     useState(initialError);
-  const [signUpUser, setSignUpUser] = useRecoilState(signUpUserState);
-  const { showErrorMessage } = useAlert();
+  const { verifyEmail } = useAuth();
 
   const handleCode = (code: string) => {
     setEmailVerificationForm({
@@ -36,26 +28,7 @@ const VerifyEmailModal = () => {
       setEmailVerificationFormError(errorFields);
       return;
     } else {
-      const userData = {
-        Username: signUpUser?.user.username as string,
-        Pool: userPool,
-      };
-      const cognitoUser = new CognitoUser(userData);
-      cognitoUser.confirmRegistration(
-        emailVerificationForm.code,
-        true,
-        (err) => {
-          if (err) {
-            showErrorMessage("User email was not successfully verified");
-            console.error(err);
-          } else {
-            showModal(MODAL_TYPE.SIGNUP);
-            setSignUpUser({
-              user: { ...signUpUser?.user, userConfirmed: true },
-            } as ISignUpUser);
-          }
-        }
-      );
+      verifyEmail(emailVerificationForm.code);
     }
   };
   return (

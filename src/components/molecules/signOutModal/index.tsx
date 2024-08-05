@@ -1,10 +1,8 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import styles from "./style.module.css";
 import useModal from "../../../hooks/useModal";
 
 const SignOutModal = () => {
-  const { signOutModalContainer } = styles;
   const { removeModal } = useModal();
   const navigate = useNavigate();
 
@@ -20,8 +18,8 @@ const SignOutModal = () => {
   }, []);
 
   return (
-    <div className={signOutModalContainer}>
-      <h1>You have successfully signed out</h1>
+    <div className="text-center">
+      <h1 className="mt-0 mb-5">You have successfully signed out</h1>
     </div>
   );
 };

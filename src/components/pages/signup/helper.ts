@@ -7,6 +7,9 @@ export const validateSignUpForm = (
   initialInputErrors: Required<SignupInputError>
 ): Required<SignupInputError> => {
   const errorInputFields = { ...initialInputErrors };
+  if (!inputForm.username) {
+    errorInputFields.usernameError = "Username is required";
+  }
   if (!inputForm.email) {
     errorInputFields.emailError = "Email is required";
   }

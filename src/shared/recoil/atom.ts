@@ -5,6 +5,7 @@ import {
   NavItemEnum,
   MODAL_TYPE,
   ISignUpUser,
+  IAuthUser,
 } from "../types";
 
 export const alertMessageState = atom<alertMessageType | null>({
@@ -45,4 +46,9 @@ export const menuShownState = atom<boolean>({
 export const signUpUserState = atom<ISignUpUser | undefined>({
   key: "signUpUserState",
   default: undefined,
+});
+
+export const authUserState = atom<IAuthUser | null>({
+  key: "authUserState",
+  default: null,
 });
