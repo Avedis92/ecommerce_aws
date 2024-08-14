@@ -1,6 +1,6 @@
 import { IRequestData, IHeaderOptions } from "../types";
 
-const createSearchParamsString = (paramsObject) => {
+const createSearchParamsString = (paramsObject: Record<string, string>) => {
   const searchParams = new URLSearchParams();
 
   for (const key in paramsObject) {
@@ -40,6 +40,7 @@ const addHeaders = (
 };
 
 type IProcessOptions = Pick<IRequestData, "headers" | "method" | "body">;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const processOptions = (requestData: IRequestData): any => {
   const options = {
     method: requestData.method || "GET",
