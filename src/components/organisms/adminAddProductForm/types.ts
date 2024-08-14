@@ -5,6 +5,7 @@ export interface IProductInputError {
   priceError: string;
   ratingError: string;
   imageSourceError: string;
+  quantityError: string;
 }
 
 export interface IProductInputForm {
@@ -12,6 +13,7 @@ export interface IProductInputForm {
   description: string;
   price: string;
   rating: string;
+  quantity: string;
   category: CategoryType;
   imageSource: string;
 }

@@ -23,14 +23,13 @@ export const validateProductInputs = (
   if (!inputForm.price) {
     errorInputFields.priceError = "Price is required";
   }
-  if (isNaN(+inputForm.price)) {
-    errorInputFields.priceError = "Price should only be a number";
-  }
+
   if (!inputForm.rating) {
     errorInputFields.ratingError = "Rating is required";
   }
-  if (isNaN(+inputForm.rating)) {
-    errorInputFields.ratingError = "Rating should only be a number";
+  if (!inputForm.quantity) {
+    errorInputFields.ratingError = "Quantity is required";
   }
+
   return errorInputFields;
 };

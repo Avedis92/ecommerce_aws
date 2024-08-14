@@ -16,7 +16,7 @@ const SelectField = ({ labelName, onChange, value }: ISelectFieldProp) => {
         {labelName}:
       </label>
       <select
-        className="block text-left w-24 h-8 text-xl"
+        className="block text-left w-24 h-8 text-xl border-2 border-gray-400"
         id={categorySelectionId}
         value={value}
         onChange={handleChange}

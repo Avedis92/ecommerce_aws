@@ -11,6 +11,7 @@ export interface IRequestData {
   method?: "GET" | "POST" | "DELETE" | "PUT";
   headers?: IHeaderOptions;
   body?: string;
+  apigatewayEndpoint?: string;
 }
 
 export interface IField {
@@ -30,6 +31,7 @@ export interface IProduct {
   description: string;
   price: number;
   rating: number;
+  quantity: number;
   category: CategoryType;
   imageSource: string;
   creationDate: number;
@@ -47,8 +49,8 @@ export enum AdminNavEnum {
 }
 
 export enum MessageTypeEnum {
-  SUCCESS = "Success",
-  ERROR = "Error",
+  SUCCESS = "success",
+  ERROR = "error",
 }
 export interface alertMessageType {
   type: MessageTypeEnum;
