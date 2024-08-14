@@ -1,22 +1,21 @@
 import { useState } from "react";
-import style from "./style.module.css";
 import Field from "../field";
 import SelectField from "../selectField";
 import { initialAdminProductForm, initialProductInputError } from "./constant";
-import { CategoryType } from "../../../shared/types";
+import { CategoryType, MessageTypeEnum } from "../../../shared/types";
 import { IProductInputError, IProductInputForm } from "./types";
 import { validateProductInputs, allFieldsAreEmpty } from "./helper";
-// import useAlert from "../../../hooks/useAlert";
+import { addProduct } from "../../../shared/fetch/fetch";
+import useAlert from "../../../hooks/useAlert";
 
 const AdminAddProduct = () => {
-  const { mainFormContainer, priceRatingContainer } = style;
   const [productForm, setProductForm] = useState<IProductInputForm>(
     initialAdminProductForm
   );
   const [productFormError, setProductFormError] = useState<IProductInputError>(
     initialProductInputError
   );
-  // const { showErrorMessage, showSuccessMessage } = useAlert();
+  const { showErrorMessage, showSuccessMessage } = useAlert();
 
   const handleTitleChange = (title: string) => {
     setProductForm({
@@ -48,6 +47,12 @@ const AdminAddProduct = () => {
       rating,
     });
   };
+  const handleQuantityChange = (quantity: string) => {
+    setProductForm({
+      ...productForm,
+      quantity,
+    });
+  };
   const handleCategoryChange = (category: string) => {
     setProductForm({
       ...productForm,
@@ -64,24 +69,27 @@ const AdminAddProduct = () => {
     if (!allFieldsAreEmpty(errorFields)) {
       setProductFormError(errorFields);
     } else {
-      /*try {
-        const ref = collection(db, CollectionEnum.PRODUCTS);
-        await addDoc(ref, {
+      try {
+        const product = {
           ...productForm,
           price: +productForm.price,
+          quantity: +productForm.quantity,
           rating: +productForm.rating,
           creationDate: new Date().getTime(),
-        });
-        setProductFormError(initialProductInputError);
-        setProductForm(initialAdminProductForm);
-        showSuccessMessage("Product successfully added");
-      } catch (e) {
+        };
+        const res = await addProduct(product);
+        if (res.type === MessageTypeEnum.SUCCESS) {
+          showSuccessMessage(res.message);
+          setProductFormError(initialProductInputError);
+          setProductForm(initialAdminProductForm);
+        } else showErrorMessage(res.message);
+      } catch {
         showErrorMessage("Product failed to be added. Try again");
-      } */
+      }
     }
   };
   return (
-    <form className={mainFormContainer}>
+    <form className="bg-white my-4 mx-0 pl-8 pt-4 min-w-40 rounded-xl">
       <Field
         labelName="Product Title"
         placeholder="Type here"
@@ -106,7 +114,7 @@ const AdminAddProduct = () => {
         value={productForm.imageSource}
         error={productFormError.imageSourceError}
       />
-      <div className={priceRatingContainer}>
+      <div className="flex justify-between items-center flex-wrap">
         <Field
           labelName="Price"
           placeholder="Type here"
@@ -114,6 +122,14 @@ const AdminAddProduct = () => {
           onChange={handlePriceChange}
           value={productForm.price}
           error={productFormError.priceError}
+        />
+        <Field
+          labelName="Quantity"
+          placeholder="Type here"
+          type="text"
+          onChange={handleQuantityChange}
+          value={productForm.quantity}
+          error={productFormError.quantityError}
         />
         <Field
           labelName="Rating"
@@ -129,7 +145,14 @@ const AdminAddProduct = () => {
         onChange={handleCategoryChange}
         value={productForm.category}
       />
-      <button onClick={(e) => handleClick(e)}>Add</button>
+      <button
+        className="bg-cyan-600 w-40 text-xl text-white 
+      font-bold border-none rounded-xl py-4 px-0 cursor-pointer
+      mb-5 transform transition duration-200 ease-in-out hover:scale-110 active:scale-90"
+        onClick={(e) => handleClick(e)}
+      >
+        Add
+      </button>
     </form>
   );
 };

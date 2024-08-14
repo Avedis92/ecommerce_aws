@@ -5,6 +5,7 @@ export const initialAdminProductForm: IProductInputForm = {
   description: "",
   price: "",
   rating: "",
+  quantity: "",
   category: "pants",
   imageSource: "",
 };
@@ -15,4 +16,5 @@ export const initialProductInputError: IProductInputError = {
   priceError: "",
   ratingError: "",
   imageSourceError: "",
+  quantityError: "",
 };

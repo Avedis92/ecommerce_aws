@@ -27,7 +27,7 @@ const Field = ({
         value={value}
         onChange={handleChange}
         type={type}
-        className="block text-left w-11/12 h-8 text-xl"
+        className="block text-left w-11/12 h-8 text-xl border-2 border-gray-400"
       />
       {error && (
         <p className="text-lg font-bold text-red-500 text-left">{error}</p>
