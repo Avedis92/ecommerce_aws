@@ -13,12 +13,13 @@ const createSearchParamsString = (paramsObject: Record<string, string>) => {
 };
 
 export const processUrl = (requestData: IRequestData) => {
+  const baseUrl = import.meta.env["VITE_AWS_API_GATEWAY_BASE_URL"];
   const endpoint = requestData.endpoints;
   const path = requestData.path || "";
   const searchParams = requestData.params
     ? `?${createSearchParamsString(requestData.params)}`
     : "";
-  return `${endpoint}${path}${searchParams}`;
+  return `${baseUrl}${endpoint}${path}${searchParams}`;
 };
 
 const addHeaders = (
@@ -45,6 +46,7 @@ export const processOptions = (requestData: IRequestData): any => {
   const options = {
     method: requestData.method || "GET",
     ...addHeaders(requestData.headers),
+    mode: "cors",
   };
   if (requestData.body) {
     (options as IProcessOptions).body = requestData.body;
