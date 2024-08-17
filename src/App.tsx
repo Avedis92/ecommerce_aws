@@ -9,6 +9,7 @@ import SignUp from "./components/pages/signup";
 import Alert from "./components/molecules/alert";
 import AdminPage from "./components/pages/admin";
 import Loader from "./components/molecules/loader";
+import ProductPage from "./components/pages/product";
 
 const App = () => {
   const location = useLocation();
@@ -19,6 +20,7 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/signIn" element={<SignIn />} />
         <Route path="/signUp" element={<SignUp />} />
+        <Route path="/products/:productId" element={<ProductPage />} />
         <Route path="/admin" element={<AdminPage />} />
       </Routes>
       <Modal />
