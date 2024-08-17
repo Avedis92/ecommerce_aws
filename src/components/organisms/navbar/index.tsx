@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FiShoppingCart } from "react-icons/fi";
 import NavLeftContent from "../../molecules/navLeftContent";
@@ -16,6 +17,17 @@ const Navbar = () => {
   };
 
   const navigateToCart = () => {};
+
+  useEffect(() => {
+    // window.addEventListener("resize", handleWindowSize);
+    const loader = document.querySelector(
+      ".appLoaderContainer"
+    ) as HTMLDivElement;
+    if (loader) {
+      loader.style.display = "none";
+    }
+    // return () => window.removeEventListener("resize", handleWindowSize);
+  }, []);
 
   return (
     <nav className="flex justify-between items-center bg-white py-0 px-8">
