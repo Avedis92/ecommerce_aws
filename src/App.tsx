@@ -11,6 +11,9 @@ import AdminPage from "./components/pages/admin";
 import Loader from "./components/molecules/loader";
 import ProductPage from "./components/pages/product";
 import Footer from "./components/organisms/footer";
+import Pants from "./components/pages/pants";
+import Shirts from "./components/pages/shirts";
+import Shoes from "./components/pages/shoes";
 
 const App = () => {
   const location = useLocation();
@@ -19,6 +22,9 @@ const App = () => {
       {location.pathname.includes("admin") ? <AdminNavbar /> : <Navbar />}
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/pants" element={<Pants />} />
+        <Route path="/shirts" element={<Shirts />} />
+        <Route path="/shoes" element={<Shoes />} />
         <Route path="/signIn" element={<SignIn />} />
         <Route path="/signUp" element={<SignUp />} />
         <Route path="/products/:productId" element={<ProductPage />} />
