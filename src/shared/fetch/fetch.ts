@@ -36,3 +36,13 @@ export const getProductsByCategory = async (
     (res) => res.json()
   );
 };
+
+export const getProductById = async (id: string): Promise<IProduct> => {
+  const requestData: IRequestData = {
+    endpoints: localEndpoints.products,
+    path: `/${id}`,
+  };
+  return fetch(processUrl(requestData), processOptions(requestData)).then(
+    (res) => res.json()
+  );
+};

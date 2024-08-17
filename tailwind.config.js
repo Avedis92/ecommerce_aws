@@ -6,6 +6,15 @@ export default {
       borderWidth: {
         16: "16px",
       },
+      maxHeight: {
+        100: "25rem",
+      },
+      maxWidth: {
+        "2/5": "40%",
+      },
+      gridTemplateColumns: {
+        "auto-fit-minmax-300": "repeat(auto-fit, minmax(300px, 1fr))",
+      },
     },
     keyframes: {
       spin: {
@@ -19,9 +28,6 @@ export default {
     },
     animation: {
       spinner: "spin 1s linear infinite",
-    },
-    gridTemplateColumns: {
-      "auto-fit-minmax-300": "repeat(auto-fit, minmax(300px, 1fr))",
     },
   },
   plugins: [],

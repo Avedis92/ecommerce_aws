@@ -1,6 +1,6 @@
-import { selector } from "recoil";
+import { selector, selectorFamily } from "recoil";
 import { IProduct, CategoryEnum } from "../types";
-import { getProductsByCategory } from "../fetch/fetch";
+import { getProductsByCategory, getProductById } from "../fetch/fetch";
 
 type HomepageProductsType = Record<string, IProduct[]>[];
 /* export const getProductsByCategorySelector = selector<IProduct[]>({
@@ -21,14 +21,13 @@ type HomepageProductsType = Record<string, IProduct[]>[];
   },
 }); */
 
-/*export const getSpecificProductsByCategorySelector = selectorFamily<
+export const getProductsByCategorySelector = selectorFamily<
   IProduct[],
   [CategoryEnum, string]
 >({
   key: "getSpecificProductsByCategorySelector",
   get:
     ([category, limit]) =>
-    //@ts-ignore
     async () => {
       try {
         const products = await getProductsByCategory(category, limit);
@@ -37,7 +36,7 @@ type HomepageProductsType = Record<string, IProduct[]>[];
         return [];
       }
     },
-});*/
+});
 
 export const getHomePageProductsSelector = selector<HomepageProductsType>({
   key: "getHomePageProductsSelector",
@@ -56,23 +55,22 @@ export const getHomePageProductsSelector = selector<HomepageProductsType>({
   },
 });
 
-/* export const getSpecificProductSelector = selectorFamily<IProduct, string>({
+export const getSpecificProductSelector = selectorFamily<IProduct, string>({
   key: "getSpecificProductSelector",
   get:
-    (documentId) =>
+    (id) =>
     // @ts-ignore
     async () => {
       try {
-        const docRef = doc(db, CollectionEnum.PRODUCTS, documentId);
-        const docSnapShot = await getDoc(docRef);
-        return docSnapShot.data();
+        const product = await getProductById(id);
+        return product;
       } catch (e) {
         return [];
       }
     },
 });
 
-export const getSpecificAuthUserFromCollectionSelector = selectorFamily<
+/* export const getSpecificAuthUserFromCollectionSelector = selectorFamily<
   AuthUserExtraInfoType,
   string | undefined
 >({
