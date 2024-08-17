@@ -9,6 +9,9 @@ export default {
       maxHeight: {
         100: "25rem",
       },
+      height: {
+        100: "25rem",
+      },
       maxWidth: {
         "2/5": "40%",
       },

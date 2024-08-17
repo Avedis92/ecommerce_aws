@@ -23,7 +23,7 @@ type HomepageProductsType = Record<string, IProduct[]>[];
 
 export const getProductsByCategorySelector = selectorFamily<
   IProduct[],
-  [CategoryEnum, string]
+  [CategoryEnum, string?]
 >({
   key: "getSpecificProductsByCategorySelector",
   get:
