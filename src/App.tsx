@@ -10,6 +10,7 @@ import Alert from "./components/molecules/alert";
 import AdminPage from "./components/pages/admin";
 import Loader from "./components/molecules/loader";
 import ProductPage from "./components/pages/product";
+import Footer from "./components/organisms/footer";
 
 const App = () => {
   const location = useLocation();
@@ -24,6 +25,7 @@ const App = () => {
         <Route path="/admin" element={<AdminPage />} />
       </Routes>
       <Modal />
+      <Footer />
       <Alert />
     </Suspense>
   );
