@@ -8,7 +8,7 @@ export interface IRequestData {
   endpoints: string;
   path?: string;
   params?: Record<string, string>;
-  method?: "GET" | "POST" | "DELETE" | "PUT";
+  method?: "GET" | "POST" | "DELETE" | "PUT" | "PATCH";
   headers?: IHeaderOptions;
   body?: string;
   apigatewayEndpoint?: string;
@@ -130,4 +130,15 @@ export interface IAuthUser {
   profileName: string;
   isAdmin: boolean;
   isEmailConfirmed: boolean;
+  userId: string;
+}
+
+export type ICartProductType = Pick<
+  IProduct,
+  "id" | "price" | "quantity" | "imageSource" | "title"
+>;
+export interface ICart {
+  id: string;
+  userId: string;
+  products: ICartProductType[];
 }

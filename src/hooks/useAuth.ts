@@ -5,10 +5,15 @@ import {
   AuthenticationDetails,
   CognitoUserAttribute,
 } from "amazon-cognito-identity-js";
-import { authUserState, signUpUserState } from "../shared/recoil/atom";
+import {
+  authUserState,
+  signUpUserState,
+  cartState,
+} from "../shared/recoil/atom";
 import { userPool as Pool } from "../shared/config";
 import { MODAL_TYPE, ISignUpUser } from "../shared/types";
 import { createAuthUser } from "../shared/helpers";
+import { getCartByUserId } from "../shared/fetch/fetch";
 import useModal from "./useModal";
 import useAlert from "./useAlert";
 
@@ -17,6 +22,7 @@ const useAuth = () => {
   const { showModal } = useModal();
   const [authUser, setAuthUser] = useRecoilState(authUserState);
   const [signUpUser, setSignUpUser] = useRecoilState(signUpUserState);
+  const [cart, setCart] = useRecoilState(cartState);
 
   const authenticateUser = (email: string, password: string) => {
     const userData = {
@@ -122,7 +128,17 @@ const useAuth = () => {
       }
     }
   }, []);
-  return { authenticateUser, signUp, verifyEmail, signOut, authUser };
+
+  useEffect(() => {
+    if (authUser) {
+      getCartByUserId(authUser.userId).then((res) => {
+        if (res) {
+          setCart(res);
+        }
+      });
+    }
+  }, [authUser]);
+  return { authenticateUser, signUp, verifyEmail, signOut, authUser, cart };
 };
 
 export default useAuth;

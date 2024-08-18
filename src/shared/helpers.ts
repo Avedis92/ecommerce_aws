@@ -20,5 +20,6 @@ export const createAuthUser = (data: CognitoUserAttribute[]): IAuthUser => {
       "true"
         ? true
         : false,
+    userId: data?.find((ua) => ua.Name === "sub")?.Value as string,
   };
 };

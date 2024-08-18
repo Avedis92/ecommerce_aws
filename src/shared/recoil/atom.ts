@@ -6,6 +6,7 @@ import {
   MODAL_TYPE,
   ISignUpUser,
   IAuthUser,
+  ICart,
 } from "../types";
 
 export const alertMessageState = atom<alertMessageType | null>({
@@ -50,5 +51,10 @@ export const signUpUserState = atom<ISignUpUser | undefined>({
 
 export const authUserState = atom<IAuthUser | null>({
   key: "authUserState",
+  default: null,
+});
+
+export const cartState = atom<ICart | null>({
+  key: "cartState",
   default: null,
 });

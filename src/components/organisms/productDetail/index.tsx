@@ -1,69 +1,93 @@
 import { useState, ReactElement, useEffect } from "react";
-/*import { useRecoilValue, useRecoilState } from "recoil";
-import {
-  authenticatedUserState,
-  userCartCountState,
-} from "../../../shared/recoil/atom";*/
-import { IProduct } from "../../../shared/types";
+import { useRecoilState } from "recoil";
+import { userCartCountState } from "../../../shared/recoil/atom";
+import { IProduct, MODAL_TYPE, MessageTypeEnum } from "../../../shared/types";
 import { FaStar } from "react-icons/fa"; // filled star
 import { FaRegStar } from "react-icons/fa"; // empty star
 import { FaStarHalfAlt } from "react-icons/fa"; // half filled star;
 import { sizes, selectedSizeStyle } from "./constants";
-
-/*import useAlert from "../../../hooks/useAlert";
-import useModal from "../../../hooks/useModal";*/
+import useAuth from "../../../hooks/useAuth";
+import useModal from "../../../hooks/useModal";
+import useAlert from "../../../hooks/useAlert";
+import { addNewCart, updateCart } from "../../../shared/fetch/fetch";
+import { createNewProductList } from "./helper";
 
 const ProductDetail = (props: IProduct) => {
-  const { imageSource, rating, price, title, description, category } = props;
+  const { imageSource, rating, price, title, description, category, id } =
+    props;
   const [selectedSize, setSelectedSize] = useState(-1);
   const [ratingStars, setRatingStars] = useState<ReactElement[]>([]);
-  //const authenticatedUser = useRecoilValue(authenticatedUserState);
-  //const { showErrorMessage } = useAlert();
-  //const [cartCount, setCartCount] = useRecoilState(userCartCountState);
-  // const { showModal } = useModal();
+  const { showErrorMessage, showSuccessMessage } = useAlert();
+  const [cartCount, setCartCount] = useRecoilState(userCartCountState);
+  const { showModal } = useModal();
+  const { authUser, cart } = useAuth();
 
   const handleSizeSelection = (sizeIndex: number) => {
     setSelectedSize(sizeIndex);
   };
   const handleAddToCart = async () => {
-    /*try {
-      if (!authenticatedUser) {
+    try {
+      if (!authUser) {
         showModal(MODAL_TYPE.DENIED_ACCESS);
       } else {
-        const cartsRef = collection(db, CollectionEnum.CARTS);
-        const q = query(
-          cartsRef,
-          where("productId", "==", id),
-          where("userId", "==", authenticatedUser?.uid)
-        );
-        const snapshot = await getDocs(q);
-        if (snapshot.empty) {
-          await addDoc(cartsRef, {
-            productId: id,
+        /*
+        1- if cart already exists we will call update cart endpoint:
+        we need to check if the product already exists or not
+        if it exists then we will call the update cart endpoint and update the quantity property
+        else we will call the update to cart endpoint and add the new product with the quantity of 1
+
+        2- if not we will call add new cart endpoint
+         */
+        if (!cart) {
+          const productToAddOnCart = {
+            id,
             title,
-            unitPrice: price,
-            userId: authenticatedUser?.uid,
-            imageSource,
+            price,
             quantity: 1,
-            totalPrice: price,
-            cartUpdateDate: new Date().getTime(),
-          });
-          setCartCount(cartCount + 1);
+            imageSource,
+          };
+          const cartObj = {
+            userId: authUser.userId,
+            products: [productToAddOnCart],
+          };
+          const res = await addNewCart(cartObj);
+          if (res.type === MessageTypeEnum.SUCCESS) {
+            showSuccessMessage(res.message);
+          } else showErrorMessage(res.message);
         } else {
-          const cart = snapshot.docs[0];
-          const cartDocRef = doc(db, CollectionEnum.CARTS, cart.id);
-          const cartData = cart.data() as ICart;
-          await updateDoc(cartDocRef, {
-            quantity: cartData.quantity + 1,
-            totalPrice: cartData.totalPrice + cartData.unitPrice,
-            cartUpdateDate: new Date().getTime(),
-          });
-          setCartCount(cartCount + 1);
+          // check if the product already exists in the cart
+          const existingProduct = cart.products.find((p) => p.id === id);
+          if (!existingProduct) {
+            const productToAddOnCart = {
+              id,
+              title,
+              price,
+              quantity: 1,
+              imageSource,
+            };
+            const res = await updateCart(
+              [...cart.products, productToAddOnCart],
+              cart.id
+            );
+            if (res.type === MessageTypeEnum.SUCCESS) {
+              showSuccessMessage(res.message);
+            } else showErrorMessage(res.message);
+          } else {
+            const res = await updateCart(
+              createNewProductList(cart.products, existingProduct),
+              cart.id
+            );
+            if (res.type === MessageTypeEnum.SUCCESS) {
+              showSuccessMessage(res.message);
+            } else showErrorMessage(res.message);
+          }
         }
+        setCartCount(cartCount + 1);
       }
-    } catch (e) {
-      showErrorMessage("An error occurred while adding to cart!");
-    }*/
+    } catch {
+      // to update
+      showErrorMessage("Error");
+    }
   };
   useEffect(() => {
     const filledStars = Math.floor(rating);

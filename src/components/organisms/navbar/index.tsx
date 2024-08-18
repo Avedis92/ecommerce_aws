@@ -6,17 +6,24 @@ import ProductNavigator from "./productNavigator";
 import UserSettings from "../../molecules/userSettings";
 import useAuth from "../../../hooks/useAuth";
 import useNavbar from "../../../hooks/useNavbar";
+import { MODAL_TYPE } from "../../../shared/types";
 
 const Navbar = () => {
   const navigate = useNavigate();
   const { signOut, authUser } = useAuth();
-  const { pathname } = useNavbar();
+  const { pathname, showModal } = useNavbar();
 
   const handleSignIn = () => {
     navigate("/signIn");
   };
 
-  const navigateToCart = () => {};
+  const navigateToCart = () => {
+    if (authUser) {
+      navigate("/cart");
+    } else {
+      showModal(MODAL_TYPE.DENIED_ACCESS);
+    }
+  };
 
   useEffect(() => {
     // window.addEventListener("resize", handleWindowSize);
