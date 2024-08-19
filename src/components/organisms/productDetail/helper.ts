@@ -5,7 +5,7 @@ export const createNewProductList = (
   existingProduct: ICartProductType
 ): ICartProductType[] => {
   const filteredProducts = productList.filter(
-    (p) => p.id === existingProduct.id
+    (p) => p.id !== existingProduct.id
   );
   return [
     ...filteredProducts,

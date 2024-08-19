@@ -50,11 +50,15 @@ export const getProductById = async (id: string): Promise<IProduct> => {
 };
 
 export const getCartByUserId = async (
-  userId?: string
+  userId: string,
+  accessToken: string
 ): Promise<ICart | null> => {
   const requestData: IRequestData = {
     endpoints: localEndpoints.carts,
     path: `/${userId}`,
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
   };
   return fetch(processUrl(requestData), processOptions(requestData)).then(
     (res) => res.json()
@@ -62,13 +66,17 @@ export const getCartByUserId = async (
 };
 
 export const addNewCart = async (
-  cartObj: Omit<ICart, "id">
+  cartObj: Omit<ICart, "id">,
+  accessToken: string
 ): Promise<alertMessageType> => {
   const requestData: IRequestData = {
     endpoints: localEndpoints.carts,
     path: "/add",
     method: "POST",
     body: JSON.stringify(cartObj),
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
   };
   return fetch(processUrl(requestData), processOptions(requestData)).then(
     (res) => res.json()
@@ -77,13 +85,17 @@ export const addNewCart = async (
 
 export const updateCart = async (
   products: ICartProductType[],
-  cartId: string
+  cartId: string,
+  accessToken: string
 ): Promise<alertMessageType> => {
   const requestData: IRequestData = {
     endpoints: localEndpoints.carts,
     path: `/add/${cartId}`,
     method: "PATCH",
     body: JSON.stringify(products),
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
   };
   return fetch(processUrl(requestData), processOptions(requestData)).then(
     (res) => res.json()

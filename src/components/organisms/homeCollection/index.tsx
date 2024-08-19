@@ -14,7 +14,7 @@ const HomeCollection = ({ title, products }: IHomeCollectionProps) => {
 
   return (
     <>
-      {!areProductsLoaded ? (
+      {areProductsLoaded ? (
         <div className="text-center mb-16">
           {title && (
             <h1 className="underline text-3xl font-bold mb-4">{title}</h1>

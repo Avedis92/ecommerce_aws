@@ -4,15 +4,17 @@ import {
   CognitoUser,
   AuthenticationDetails,
   CognitoUserAttribute,
+  CognitoUserSession,
 } from "amazon-cognito-identity-js";
 import {
   authUserState,
   signUpUserState,
   cartState,
+  userCartCountState,
 } from "../shared/recoil/atom";
 import { userPool as Pool } from "../shared/config";
 import { MODAL_TYPE, ISignUpUser } from "../shared/types";
-import { createAuthUser } from "../shared/helpers";
+import { createAuthUser, getTotalProductCount } from "../shared/helpers";
 import { getCartByUserId } from "../shared/fetch/fetch";
 import useModal from "./useModal";
 import useAlert from "./useAlert";
@@ -23,6 +25,7 @@ const useAuth = () => {
   const [authUser, setAuthUser] = useRecoilState(authUserState);
   const [signUpUser, setSignUpUser] = useRecoilState(signUpUserState);
   const [cart, setCart] = useRecoilState(cartState);
+  const [cartCount, setCartCount] = useRecoilState(userCartCountState);
 
   const authenticateUser = (email: string, password: string) => {
     const userData = {
@@ -56,7 +59,6 @@ const useAuth = () => {
     extraAttributes: CognitoUserAttribute[]
   ) => {
     Pool.signUp(email, password, extraAttributes, [], (err, data) => {
-      console.log(extraAttributes);
       if (err) {
         showErrorMessage("User was not successfully signed Up");
         console.error(err);
@@ -102,6 +104,38 @@ const useAuth = () => {
     cognitoUser.signOut();
     showModal(MODAL_TYPE.SIGNOUT);
     setAuthUser(null);
+    setCart(null);
+    setCartCount(0);
+  };
+
+  const verifySessionValidity = async () => {
+    return new Promise((resolve, reject) => {
+      const cognitoUser = Pool.getCurrentUser();
+      if (cognitoUser) {
+        cognitoUser.getSession(
+          (err: Error, session: CognitoUserSession | null) => {
+            if (err || !session) {
+              reject(new Error("Ann error occurred while getting session"));
+            }
+            if (session && session.isValid()) {
+              resolve(session.getIdToken().getJwtToken());
+            } else if (session && !session.isValid()) {
+              cognitoUser.refreshSession(
+                session.getRefreshToken(),
+                (err: Error, newSession: CognitoUserSession) => {
+                  if (err) {
+                    reject(
+                      new Error("An error occurred while getting new session")
+                    );
+                  }
+                  resolve(newSession.getIdToken().getJwtToken());
+                }
+              );
+            }
+          }
+        );
+      }
+    });
   };
 
   useEffect(() => {
@@ -131,14 +165,35 @@ const useAuth = () => {
 
   useEffect(() => {
     if (authUser) {
-      getCartByUserId(authUser.userId).then((res) => {
-        if (res) {
-          setCart(res);
-        }
-      });
+      verifySessionValidity()
+        .then((accessToken) => {
+          if (accessToken) {
+            getCartByUserId(authUser.userId, accessToken as string).then(
+              (res) => {
+                if (res) {
+                  setCart(res);
+                  setCartCount(getTotalProductCount(res.products));
+                }
+              }
+            );
+          }
+        })
+        .catch((e) => {
+          showErrorMessage(e.message);
+        });
     }
   }, [authUser]);
-  return { authenticateUser, signUp, verifyEmail, signOut, authUser, cart };
+
+  return {
+    authenticateUser,
+    signUp,
+    verifyEmail,
+    signOut,
+    authUser,
+    cart,
+    verifySessionValidity,
+    cartCount,
+  };
 };
 
 export default useAuth;
