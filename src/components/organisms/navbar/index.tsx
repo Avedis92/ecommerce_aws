@@ -6,17 +6,24 @@ import ProductNavigator from "./productNavigator";
 import UserSettings from "../../molecules/userSettings";
 import useAuth from "../../../hooks/useAuth";
 import useNavbar from "../../../hooks/useNavbar";
+import { MODAL_TYPE } from "../../../shared/types";
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const { signOut, authUser } = useAuth();
-  const { pathname } = useNavbar();
+  const { signOut, authUser, cartCount } = useAuth();
+  const { pathname, showModal } = useNavbar();
 
   const handleSignIn = () => {
     navigate("/signIn");
   };
 
-  const navigateToCart = () => {};
+  const navigateToCart = () => {
+    if (authUser) {
+      navigate("/cart");
+    } else {
+      showModal(MODAL_TYPE.DENIED_ACCESS);
+    }
+  };
 
   useEffect(() => {
     // window.addEventListener("resize", handleWindowSize);
@@ -52,6 +59,13 @@ const Navbar = () => {
         )}
         <div className="relative cursor-pointer" onClick={navigateToCart}>
           <FiShoppingCart size="2rem" />
+          <span
+            className="rounded-full text-white bg-red-600
+          font-bold absolute right-0.5 w-5 h-5 inline-flex top-0
+          justify-center items-center"
+          >
+            {cartCount}
+          </span>
         </div>
       </div>
     </nav>

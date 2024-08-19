@@ -1,5 +1,5 @@
 import { CognitoUserAttribute } from "amazon-cognito-identity-js";
-import { IInput, IInputError, IAuthUser } from "./types";
+import { IInput, IInputError, IAuthUser, ICartProductType } from "./types";
 
 export const allFieldsAreEmpty = (
   inputFields: IInput | IInputError
@@ -20,5 +20,12 @@ export const createAuthUser = (data: CognitoUserAttribute[]): IAuthUser => {
       "true"
         ? true
         : false,
+    userId: data?.find((ua) => ua.Name === "sub")?.Value as string,
   };
+};
+
+export const getTotalProductCount = (products: ICartProductType[]): number => {
+  return products.reduce((sum, p) => {
+    return (sum += p.quantity);
+  }, 0);
 };
