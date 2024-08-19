@@ -142,3 +142,7 @@ export interface ICart {
   userId: string;
   products: ICartProductType[];
 }
+export type UserCartDetailsType = Omit<ICartProductType, "price"> & {
+  unitPrice: number;
+  totalPrice: number;
+};

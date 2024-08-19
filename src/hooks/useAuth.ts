@@ -193,6 +193,7 @@ const useAuth = () => {
     cart,
     verifySessionValidity,
     cartCount,
+    setCart,
   };
 };
 
