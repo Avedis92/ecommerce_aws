@@ -14,6 +14,7 @@ import Footer from "./components/organisms/footer";
 import Pants from "./components/pages/pants";
 import Shirts from "./components/pages/shirts";
 import Shoes from "./components/pages/shoes";
+import Cart from "./components/pages/cart";
 
 const App = () => {
   const location = useLocation();
@@ -25,6 +26,7 @@ const App = () => {
         <Route path="/pants" element={<Pants />} />
         <Route path="/shirts" element={<Shirts />} />
         <Route path="/shoes" element={<Shoes />} />
+        <Route path="/cart" element={<Cart />} />
         <Route path="/signIn" element={<SignIn />} />
         <Route path="/signUp" element={<SignUp />} />
         <Route path="/products/:productId" element={<ProductPage />} />

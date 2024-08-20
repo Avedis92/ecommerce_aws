@@ -18,6 +18,9 @@ export default {
       gridTemplateColumns: {
         "auto-fit-minmax-300": "repeat(auto-fit, minmax(300px, 1fr))",
       },
+      minWidth: {
+        110: "30rem",
+      },
     },
     keyframes: {
       spin: {

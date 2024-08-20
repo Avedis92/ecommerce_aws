@@ -12,7 +12,7 @@ const useAddToCart = (props: IProduct) => {
   const { showErrorMessage, showSuccessMessage } = useAlert();
   const [cartCount, setCartCount] = useRecoilState(userCartCountState);
   const { showModal } = useModal();
-  const { authUser, cart, verifySessionValidity, signOut } = useAuth();
+  const { authUser, cart, verifySessionValidity, signOut, setCart } = useAuth();
 
   const handleAddToCart = async () => {
     try {
@@ -47,6 +47,7 @@ const useAddToCart = (props: IProduct) => {
           const res = await addNewCart(cartObj, accessToken as string);
           if (res.type === MessageTypeEnum.SUCCESS) {
             showSuccessMessage(res.message);
+            setCart(res.payload);
           } else showErrorMessage(res.message);
         } else {
           // check if the product already exists in the cart
@@ -66,6 +67,7 @@ const useAddToCart = (props: IProduct) => {
             );
             if (res.type === MessageTypeEnum.SUCCESS) {
               showSuccessMessage(res.message);
+              setCart(res.payload);
             } else showErrorMessage(res.message);
           } else {
             const res = await updateCart(
@@ -75,6 +77,7 @@ const useAddToCart = (props: IProduct) => {
             );
             if (res.type === MessageTypeEnum.SUCCESS) {
               showSuccessMessage(res.message);
+              setCart(res.payload);
             } else showErrorMessage(res.message);
           }
         }

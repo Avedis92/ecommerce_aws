@@ -68,7 +68,7 @@ export const getCartByUserId = async (
 export const addNewCart = async (
   cartObj: Omit<ICart, "id">,
   accessToken: string
-): Promise<alertMessageType> => {
+): Promise<alertMessageType & { payload: ICart }> => {
   const requestData: IRequestData = {
     endpoints: localEndpoints.carts,
     path: "/add",
@@ -87,7 +87,7 @@ export const updateCart = async (
   products: ICartProductType[],
   cartId: string,
   accessToken: string
-): Promise<alertMessageType> => {
+): Promise<alertMessageType & { payload: ICart }> => {
   const requestData: IRequestData = {
     endpoints: localEndpoints.carts,
     path: `/add/${cartId}`,

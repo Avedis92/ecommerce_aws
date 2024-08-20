@@ -1,8 +1,10 @@
 import { selector, selectorFamily } from "recoil";
-import { IProduct, CategoryEnum } from "../types";
+import { IProduct, CategoryEnum, UserCartDetailsType } from "../types";
+import { cartState } from "./atom";
 import { getProductsByCategory, getProductById } from "../fetch/fetch";
 
 type HomepageProductsType = Record<string, IProduct[]>[];
+
 /* export const getProductsByCategorySelector = selector<IProduct[]>({
   key: "getProductsByCategorySelector",
   get: async () => {
@@ -70,60 +72,30 @@ export const getSpecificProductSelector = selectorFamily<IProduct, string>({
     },
 });
 
-/* export const getSpecificAuthUserFromCollectionSelector = selectorFamily<
-  AuthUserExtraInfoType,
-  string | undefined
->({
-  key: "getSpecificAuthUserFromCollectionSelector",
-  // @ts-ignore
-  get: (documentId) => async () => {
-    try {
-      if (documentId) {
-        const userDocRef = doc(db, CollectionEnum.USERS, documentId);
-        const userDocSnapshot = await getDoc(userDocRef);
-        return userDocSnapshot.data();
-      }
-      return null;
-    } catch (e) {
-      return {};
-    }
-  },
-});
-
- export const userCartDetailsSelector = selector<ICart[]>({
+export const userCartDetailsSelector = selector<UserCartDetailsType[]>({
   key: "userCartDetailsSelector",
   //@ts-ignore
   get: async ({ get }) => {
-    const authUser = get(authenticatedUserState);
-    const cartCollection = collection(db, CollectionEnum.CARTS);
-    try {
-      if (authUser) {
-        const q = query(cartCollection, where("userId", "==", authUser.uid));
-        const snapshot = await getDocs(q);
-        const nonSortedDocs = snapshot.docs.map((doc) => ({
-          ...doc.data(),
-          id: doc.id,
-        })) as ICart[];
-        return nonSortedDocs.sort(
-          (a, b) => b.cartUpdateDate - a.cartUpdateDate
-        );
-      }
-      return [];
-    } catch (e) {
-      return [];
+    const cart = get(cartState);
+    if (cart) {
+      return cart.products.map((p) => ({
+        id: p.id,
+        imageSource: p.imageSource,
+        quantity: p.quantity,
+        unitPrice: p.price,
+        totalPrice: p.price * p.quantity,
+        title: p.title,
+      }));
     }
   },
 });
 
 export const totalAmountSelector = selector<number>({
   key: "totalAmountSelector",
-  // @ts-ignore
   get: ({ get }) => {
-    const carts = get(userCartDetailsSelector);
-    if (carts.length) {
-      return carts.reduce((acc, cart) => {
-        return acc + cart.totalPrice;
-      }, 0);
-    }
+    const cartDetails = get(userCartDetailsSelector);
+    return cartDetails.reduce((acc, cd) => {
+      return acc + cd.totalPrice;
+    }, 0);
   },
-}); */
+});
