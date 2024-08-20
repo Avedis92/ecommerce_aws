@@ -9,24 +9,6 @@ import {
 
 type HomepageProductsType = Record<string, IProduct[]>[];
 
-/* export const getProductsByCategorySelector = selector<IProduct[]>({
-  key: "getProductsByCategorySelector",
-  get: async () => {
-    try {
-      const productRef = collection(db, CollectionEnum.PRODUCTS);
-      const snapshot = await getDocs(productRef);
-
-      const products = snapshot.docs.map((doc) => ({
-        ...(doc.data() as IProduct),
-        id: doc.id,
-      }));
-      return products;
-    } catch (e) {
-      return [];
-    }
-  },
-}); */
-
 export const getProductsByCategorySelector = selectorFamily<
   IProduct[],
   [CategoryEnum, string?]

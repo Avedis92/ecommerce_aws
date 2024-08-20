@@ -190,6 +190,7 @@ const useAuth = () => {
     cart,
     verifySessionValidity,
     cartCount,
+    setCartCount,
     setCart,
   };
 };
