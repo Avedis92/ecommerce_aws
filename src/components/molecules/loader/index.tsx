@@ -4,8 +4,8 @@ const Loader = ({ text }: ILoaderProps) => {
   return (
     <div className="bg-white absolute z-50 inset-0 flex flex-col justify-center items-center">
       <div
-        className="border-spacing-4 border-solid border-[#e6e6e6] w-24 h-24 
-      rounded-full border-t-[#3498db] border-t-16 animate-spinner"
+        className="border-[#e6e6e6] border-solid border-16 border-t-16  border-t-[#3498db] w-24 h-24 
+      rounded-full animate-spinner"
       ></div>
       <p>{text}</p>
     </div>

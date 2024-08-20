@@ -20,6 +20,7 @@ export default {
       },
       minWidth: {
         110: "30rem",
+        150: "40rem",
       },
     },
     keyframes: {

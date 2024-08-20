@@ -20,3 +20,10 @@
 .cart-details-tr > th {
   @apply border-b-2 border-b-black text-center pb-4;
 }
+.listTable > thead > th {
+  @apply border-b-2 border-b-black border-solid text-center pt-4;
+}
+
+.listTable > tbody > td {
+  @apply border-b-2 border-b-black border-solid text-center py-8 px-0;
+}

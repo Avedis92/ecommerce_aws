@@ -49,6 +49,15 @@ export const getProductById = async (id: string): Promise<IProduct> => {
   );
 };
 
+export const getAllProducts = async (): Promise<IProduct[]> => {
+  const requestData: IRequestData = {
+    endpoints: localEndpoints.products,
+  };
+  return fetch(processUrl(requestData), processOptions(requestData)).then(
+    (res) => res.json()
+  );
+};
+
 export const getCartByUserId = async (
   userId: string,
   accessToken: string

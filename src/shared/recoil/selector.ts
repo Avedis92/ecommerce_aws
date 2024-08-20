@@ -1,7 +1,11 @@
 import { selector, selectorFamily } from "recoil";
 import { IProduct, CategoryEnum, UserCartDetailsType } from "../types";
 import { cartState } from "./atom";
-import { getProductsByCategory, getProductById } from "../fetch/fetch";
+import {
+  getProductsByCategory,
+  getProductById,
+  getAllProducts,
+} from "../fetch/fetch";
 
 type HomepageProductsType = Record<string, IProduct[]>[];
 
@@ -97,5 +101,17 @@ export const totalAmountSelector = selector<number>({
     return cartDetails.reduce((acc, cd) => {
       return acc + cd.totalPrice;
     }, 0);
+  },
+});
+
+export const getAllProductsSelector = selector<IProduct[] | null>({
+  key: "getAllProductsSelector",
+  get: async () => {
+    try {
+      const products = await getAllProducts();
+      return products;
+    } catch {
+      return null;
+    }
   },
 });
