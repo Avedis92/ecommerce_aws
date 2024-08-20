@@ -1,33 +1,17 @@
-/* import { useRecoilRefresher_UNSTABLE, useRecoilState } from "recoil";
-import { userCartDetailsSelector } from "../../../shared/recoil/selector";
-import { userCartCountState } from "../../../shared/recoil/atom"; */
 import { IoClose } from "react-icons/io5";
 
 import { UserCartDetailsType } from "../../../shared/types";
-// import useAlert from "../../../hooks/useAlert";
+import useCartItem from "../../../hooks/useCartItem";
 
 const CartTableRow = ({
+  id,
   title,
   unitPrice,
   quantity,
   totalPrice,
   imageSource,
 }: UserCartDetailsType) => {
-  /*const { showErrorMessage, showSuccessMessage } = useAlert();
-  const refreshCarts = useRecoilRefresher_UNSTABLE(userCartDetailsSelector);
-  const [cartCount, setCartCount] = useRecoilState(userCartCountState); */
-
-  const handleDelete = async () => {
-    /* try {
-      const deletedDocRef = doc(db, CollectionEnum.CARTS, id);
-      await deleteDoc(deletedDocRef);
-      refreshCarts();
-      setCartCount(cartCount - quantity);
-      showSuccessMessage("Cart successfully deleted");
-    } catch (err) {
-      showErrorMessage("Cart failed to be deleted. Try again later");
-    } */
-  };
+  const { handleCartProductDelete } = useCartItem();
 
   return (
     <tr>
@@ -42,7 +26,10 @@ const CartTableRow = ({
       <td className="cart-table-row-td-main-styles">{quantity}</td>
       <td className="cart-table-row-td-main-styles">{totalPrice}</td>
       <td className="cart-table-row-td-main-styles">
-        <IoClose style={{ cursor: "pointer" }} onClick={handleDelete} />
+        <IoClose
+          style={{ cursor: "pointer" }}
+          onClick={() => handleCartProductDelete(id!)}
+        />
       </td>
     </tr>
   );
