@@ -8,3 +8,15 @@
 .h1-custom-basic {
   @apply text-3xl font-bold;
 }
+
+.cart-table-row-td-main-styles {
+  @apply text-center py-8 px-0 border-b-2 border-b-black;
+}
+
+.amount-summary-ul > li {
+  @apply flex items-center justify-between border-b-2 border-b-white border-solid;
+}
+
+.cart-details-tr > th {
+  @apply border-b-2 border-b-black text-center pb-4;
+}

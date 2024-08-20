@@ -11,25 +11,13 @@ const CartDetails = () => {
       {cartDetails.length > 0 ? (
         <table className="w-full py-0 px-4">
           <thead>
-            <tr>
-              <th className="border-b-2 border-b-black text-center pb-4">
-                Products
-              </th>
-              <th className="border-b-2 border-b-black text-center pb-4 w-1/3">
-                Title
-              </th>
-              <th className="border-b-2 border-b-black text-center pb-4">
-                Price
-              </th>
-              <th className="border-b-2 border-b-black text-center pb-4">
-                Quantity
-              </th>
-              <th className="border-b-2 border-b-black text-center pb-4">
-                Total
-              </th>
-              <th className="border-b-2 border-b-black text-center pb-4">
-                Remove
-              </th>
+            <tr className="cart-details-tr > th">
+              <th>Products</th>
+              <th className="w-1/3">Title</th>
+              <th>Price</th>
+              <th>Quantity</th>
+              <th>Total</th>
+              <th>Remove</th>
             </tr>
           </thead>
           <tbody className="min-h-80 overflow-y-scroll">

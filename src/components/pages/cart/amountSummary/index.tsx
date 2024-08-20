@@ -1,26 +1,19 @@
 import React, { useState } from "react";
-import { IAmountSummaryProps } from "./types";
-import styles from "./style.module.css";
+import { useRecoilValue } from "recoil";
+import { totalAmountSelector } from "../../../../shared/recoil/selector";
 
-const AmountSummary = ({ amount }: IAmountSummaryProps) => {
-  const {
-    amountSummaryContainer,
-    amountContainer,
-    promoContainer,
-    cartButton,
-    checkoutButton,
-    promoButton,
-  } = styles;
+const AmountSummary = () => {
   const [promoValue, setPromoValue] = useState("");
+  const amount = useRecoilValue(totalAmountSelector);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPromoValue(e.target.value);
   };
   return (
-    <div className={amountSummaryContainer}>
-      <div className={amountContainer}>
-        <h1>Cart Totals</h1>
-        <ul>
+    <div className="flex items-center gap-y-8 gap-x-24 flex-wrap my-8 mx-0">
+      <div className="min-w-110">
+        <h1 className="h1-custom-basic my-5 mx-0">Cart Totals</h1>
+        <ul className="list-none p-0 amount-summary-ul > li">
           <li>
             <span>Subtotal</span>
             <span>{amount}$</span>
@@ -38,22 +31,31 @@ const AmountSummary = ({ amount }: IAmountSummaryProps) => {
             </strong>
           </li>
         </ul>
-        <button className={`${cartButton} ${checkoutButton}`}>
+        <button
+          className="border-none bg-red-600 text-white font-bold cursor-pointer text-xl 
+        transform transition duration-200 ease-in-out hover:scale-110 active:scale-90
+        py-4 px-8 mt-4"
+        >
           Proceed to checkout
         </button>
       </div>
-      <div className={promoContainer}>
-        <label htmlFor="promoId">
+      <div className="self-start mt-5">
+        <label htmlFor="promoId" className="block mb-3">
           if you have a promo code, enter it here:
         </label>
-        <div>
+        <div className="flex">
           <input
             id="promoId"
             value={promoValue}
             onChange={handleChange}
             placeholder="promo code"
           />
-          <button className={`${cartButton} ${promoButton}`}>Submit</button>
+          <button
+            className="border-none bg-black text-white font-bold cursor-pointer text-xl  
+        transform transition duration-200 ease-in-out hover:scale-110 active:scale-90 py-4 px-8 ml-4"
+          >
+            Submit
+          </button>
         </div>
       </div>
     </div>

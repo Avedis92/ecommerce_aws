@@ -1,16 +1,28 @@
 import { useEffect } from "react";
+import { useSetRecoilState } from "recoil";
+import {
+  userCartCountState,
+  cartState,
+  authUserState,
+} from "../../../shared/recoil/atom";
 import { useNavigate } from "react-router-dom";
 import useModal from "../../../hooks/useModal";
 
 const SignOutModal = () => {
   const { removeModal } = useModal();
   const navigate = useNavigate();
+  const setAuthUser = useSetRecoilState(authUserState);
+  const setCart = useSetRecoilState(cartState);
+  const setCartCount = useSetRecoilState(userCartCountState);
 
   useEffect(() => {
     let timerId;
     // eslint-disable-next-line prefer-const
     timerId = setTimeout(() => {
       removeModal();
+      setAuthUser(null);
+      setCart(null);
+      setCartCount(0);
       navigate("/");
     }, 2000);
 

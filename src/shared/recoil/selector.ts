@@ -89,3 +89,13 @@ export const userCartDetailsSelector = selector<UserCartDetailsType[]>({
     }
   },
 });
+
+export const totalAmountSelector = selector<number>({
+  key: "totalAmountSelector",
+  get: ({ get }) => {
+    const cartDetails = get(userCartDetailsSelector);
+    return cartDetails.reduce((acc, cd) => {
+      return acc + cd.totalPrice;
+    }, 0);
+  },
+});

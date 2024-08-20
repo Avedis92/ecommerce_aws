@@ -31,22 +31,17 @@ const CartTableRow = ({
 
   return (
     <tr>
-      <td className="max-w-12 max-h-20 text-center py-8 px-0 border-b-2 border-b-black">
-        <img src={imageSource} />
+      <td className="max-w-12 max-h-20 p-0 cart-table-row-td-main-styles">
+        <img
+          className="w-full h-full object-cover object-center"
+          src={imageSource}
+        />
       </td>
-      <td className="text-center py-8 px-0 border-b-2 border-b-black">
-        {title}
-      </td>
-      <td className="text-center py-8 px-0 border-b-2 border-b-black">
-        {unitPrice}$
-      </td>
-      <td className="text-center py-8 px-0 border-b-2 border-b-black">
-        {quantity}
-      </td>
-      <td className="text-center py-8 px-0 border-b-2 border-b-black">
-        {totalPrice}
-      </td>
-      <td className="text-center py-8 px-0 border-b-2 border-b-black">
+      <td className="cart-table-row-td-main-styles">{title}</td>
+      <td className="cart-table-row-td-main-styles">{unitPrice}$</td>
+      <td className="cart-table-row-td-main-styles">{quantity}</td>
+      <td className="cart-table-row-td-main-styles">{totalPrice}</td>
+      <td className="cart-table-row-td-main-styles">
         <IoClose style={{ cursor: "pointer" }} onClick={handleDelete} />
       </td>
     </tr>

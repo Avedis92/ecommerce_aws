@@ -103,9 +103,6 @@ const useAuth = () => {
     const cognitoUser = new CognitoUser(userData);
     cognitoUser.signOut();
     showModal(MODAL_TYPE.SIGNOUT);
-    setAuthUser(null);
-    setCart(null);
-    setCartCount(0);
   };
 
   const verifySessionValidity = async () => {
