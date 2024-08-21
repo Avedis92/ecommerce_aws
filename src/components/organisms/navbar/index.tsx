@@ -1,16 +1,24 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSetRecoilState, useRecoilState } from "recoil";
+import { userCartCountState, cartState } from "../../../shared/recoil/atom";
 import { FiShoppingCart } from "react-icons/fi";
 import NavLeftContent from "../../molecules/navLeftContent";
 import ProductNavigator from "./productNavigator";
 import UserSettings from "../../molecules/userSettings";
 import useAuth from "../../../hooks/useAuth";
+import useAlert from "../../../hooks/useAlert";
 import useNavbar from "../../../hooks/useNavbar";
 import { MODAL_TYPE } from "../../../shared/types";
+import { getCartByUserId } from "../../../shared/fetch/fetch";
+import { getTotalProductCount } from "../../../shared/helpers";
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const { signOut, authUser, cartCount } = useAuth();
+  const { signOut, authUser, verifySessionValidity } = useAuth();
+  const { showErrorMessage } = useAlert();
+  const [cartCount, setCartCount] = useRecoilState(userCartCountState);
+  const setCart = useSetRecoilState(cartState);
   const { pathname, showModal } = useNavbar();
 
   const handleSignIn = () => {
@@ -35,6 +43,30 @@ const Navbar = () => {
     }
     // return () => window.removeEventListener("resize", handleWindowSize);
   }, []);
+
+  const updateCartInfo = async () => {
+    try {
+      const accessToken = await verifySessionValidity();
+      if (accessToken) {
+        const cart = await getCartByUserId(
+          authUser?.userId as string,
+          accessToken as string
+        );
+        if (cart) {
+          setCart(cart);
+          setCartCount(getTotalProductCount(cart.products));
+        }
+      }
+    } catch (e) {
+      showErrorMessage((e as Error).message);
+    }
+  };
+
+  useEffect(() => {
+    if (authUser) {
+      updateCartInfo();
+    }
+  }, [authUser]);
 
   return (
     <nav className="flex justify-between items-center bg-white py-0 px-8">

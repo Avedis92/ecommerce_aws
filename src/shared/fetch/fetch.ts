@@ -74,7 +74,10 @@ export const getCartByUserId = async (
     },
   };
   return fetch(processUrl(requestData), processOptions(requestData)).then(
-    (res) => res.json()
+    (res) => {
+      if (res.status === 404) throw new Error("Cart was not found");
+      else return res.json();
+    }
   );
 };
 
