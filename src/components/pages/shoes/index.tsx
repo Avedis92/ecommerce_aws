@@ -6,7 +6,6 @@ import {
 import { CategoryEnum } from "../../../shared/types";
 import SalesBanner from "../../atoms/salesBanner";
 import HomeCollection from "../../organisms/homeCollection";
-// import shoesSale from "../../../assets/shoes_sale.png";
 
 const Shoes = () => {
   const shoesProducts = useRecoilValue(

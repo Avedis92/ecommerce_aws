@@ -6,7 +6,6 @@ import {
 import { CategoryEnum } from "../../../shared/types";
 import SalesBanner from "../../atoms/salesBanner";
 import HomeCollection from "../../organisms/homeCollection";
-// import pantsSale from "../../../assets/pants_sales.webp";
 
 const Pants = () => {
   const pantsProducts = useRecoilValue(
