@@ -6,16 +6,10 @@ import {
   CognitoUserAttribute,
   CognitoUserSession,
 } from "amazon-cognito-identity-js";
-import {
-  authUserState,
-  signUpUserState,
-  cartState,
-  userCartCountState,
-} from "../shared/recoil/atom";
+import { authUserState, signUpUserState } from "../shared/recoil/atom";
 import { userPool as Pool } from "../shared/config";
 import { MODAL_TYPE, ISignUpUser } from "../shared/types";
-import { createAuthUser, getTotalProductCount } from "../shared/helpers";
-import { getCartByUserId } from "../shared/fetch/fetch";
+import { createAuthUser } from "../shared/helpers";
 import useModal from "./useModal";
 import useAlert from "./useAlert";
 
@@ -24,8 +18,6 @@ const useAuth = () => {
   const { showModal } = useModal();
   const [authUser, setAuthUser] = useRecoilState(authUserState);
   const [signUpUser, setSignUpUser] = useRecoilState(signUpUserState);
-  const [cart, setCart] = useRecoilState(cartState);
-  const [cartCount, setCartCount] = useRecoilState(userCartCountState);
 
   const authenticateUser = (email: string, password: string) => {
     const userData = {
@@ -112,7 +104,7 @@ const useAuth = () => {
         cognitoUser.getSession(
           (err: Error, session: CognitoUserSession | null) => {
             if (err || !session) {
-              reject(new Error("Ann error occurred while getting session"));
+              reject(new Error("An error occurred while getting session"));
             }
             if (session && session.isValid()) {
               resolve(session.getIdToken().getJwtToken());
@@ -160,38 +152,13 @@ const useAuth = () => {
     }
   }, []);
 
-  useEffect(() => {
-    if (authUser) {
-      verifySessionValidity()
-        .then((accessToken) => {
-          if (accessToken) {
-            getCartByUserId(authUser.userId, accessToken as string).then(
-              (res) => {
-                if (res) {
-                  setCart(res);
-                  setCartCount(getTotalProductCount(res.products));
-                }
-              }
-            );
-          }
-        })
-        .catch((e) => {
-          showErrorMessage(e.message);
-        });
-    }
-  }, [authUser]);
-
   return {
     authenticateUser,
     signUp,
     verifyEmail,
     signOut,
     authUser,
-    cart,
     verifySessionValidity,
-    cartCount,
-    setCartCount,
-    setCart,
   };
 };
 

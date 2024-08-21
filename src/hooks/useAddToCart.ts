@@ -1,5 +1,5 @@
 import { useRecoilState } from "recoil";
-import { userCartCountState } from "../shared/recoil/atom";
+import { userCartCountState, cartState } from "../shared/recoil/atom";
 import useAuth from "./useAuth";
 import useAlert from "./useAlert";
 import useModal from "./useModal";
@@ -10,9 +10,10 @@ import { createNewProductList } from "../components/organisms/productDetail/help
 const useAddToCart = (props: IProduct) => {
   const { imageSource, price, title, id } = props;
   const { showErrorMessage, showSuccessMessage } = useAlert();
+  const [cart, setCart] = useRecoilState(cartState);
   const [cartCount, setCartCount] = useRecoilState(userCartCountState);
   const { showModal } = useModal();
-  const { authUser, cart, verifySessionValidity, signOut, setCart } = useAuth();
+  const { authUser, verifySessionValidity, signOut } = useAuth();
 
   const handleAddToCart = async () => {
     try {

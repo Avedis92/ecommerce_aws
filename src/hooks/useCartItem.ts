@@ -1,12 +1,16 @@
+import { useSetRecoilState, useRecoilState } from "recoil";
+import { cartState, userCartCountState } from "../shared/recoil/atom";
 import useAlert from "./useAlert";
 import useAuth from "./useAuth";
 import { updateCart } from "../shared/fetch/fetch";
 import { ICartProductType, MessageTypeEnum } from "../shared/types";
+import { getTotalProductCount } from "../shared/helpers";
 
 const useCartItem = () => {
   const { showErrorMessage, showSuccessMessage } = useAlert();
-  const { cart, setCart, setCartCount, verifySessionValidity, signOut } =
-    useAuth();
+  const { verifySessionValidity, signOut } = useAuth();
+  const [cart, setCart] = useRecoilState(cartState);
+  const setCartCount = useSetRecoilState(userCartCountState);
 
   const handleCartProductDelete = async (productId: string) => {
     const accessToken = await verifySessionValidity();
@@ -25,10 +29,7 @@ const useCartItem = () => {
     if (res.type === MessageTypeEnum.SUCCESS) {
       showSuccessMessage(res.message);
       setCart(res.payload);
-      const totalCount = res.payload.products.reduce((acc, p) => {
-        return acc + p.quantity;
-      }, 0);
-      setCartCount(totalCount);
+      setCartCount(getTotalProductCount(res.payload.products));
     } else showErrorMessage(res.message);
   };
   return { handleCartProductDelete };
