@@ -1,7 +1,11 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSetRecoilState, useRecoilState } from "recoil";
-import { userCartCountState, cartState } from "../../../shared/recoil/atom";
+import {
+  userCartCountState,
+  cartState,
+  imageSourcesState,
+} from "../../../shared/recoil/atom";
 import { FiShoppingCart } from "react-icons/fi";
 import NavLeftContent from "../../molecules/navLeftContent";
 import ProductNavigator from "./productNavigator";
@@ -10,7 +14,10 @@ import useAuth from "../../../hooks/useAuth";
 import useAlert from "../../../hooks/useAlert";
 import useNavbar from "../../../hooks/useNavbar";
 import { MODAL_TYPE } from "../../../shared/types";
-import { getCartByUserId } from "../../../shared/fetch/fetch";
+import {
+  getCartByUserId,
+  getSalesBannerImageSource,
+} from "../../../shared/fetch/fetch";
 import { getTotalProductCount } from "../../../shared/helpers";
 
 const Navbar = () => {
@@ -19,6 +26,7 @@ const Navbar = () => {
   const { showErrorMessage } = useAlert();
   const [cartCount, setCartCount] = useRecoilState(userCartCountState);
   const setCart = useSetRecoilState(cartState);
+  const setImageSource = useSetRecoilState(imageSourcesState);
   const { pathname, showModal } = useNavbar();
 
   const handleSignIn = () => {
@@ -33,6 +41,11 @@ const Navbar = () => {
     }
   };
 
+  const getImageSource = async () => {
+    const sources = await getSalesBannerImageSource();
+    setImageSource(sources);
+  };
+
   useEffect(() => {
     // window.addEventListener("resize", handleWindowSize);
     const loader = document.querySelector(
@@ -41,6 +54,8 @@ const Navbar = () => {
     if (loader) {
       loader.style.display = "none";
     }
+    getImageSource();
+
     // return () => window.removeEventListener("resize", handleWindowSize);
   }, []);
 

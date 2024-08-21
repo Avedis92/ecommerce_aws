@@ -117,3 +117,12 @@ export const updateCart = async (
     (res) => res.json()
   );
 };
+
+export const getSalesBannerImageSource = async (): Promise<string[]> => {
+  const requestData: IRequestData = {
+    endpoints: localEndpoints.images,
+  };
+  return fetch(processUrl(requestData), processOptions(requestData)).then(
+    (res) => res.json()
+  );
+};
