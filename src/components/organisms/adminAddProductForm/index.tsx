@@ -7,6 +7,7 @@ import { IProductInputError, IProductInputForm } from "./types";
 import { validateProductInputs, allFieldsAreEmpty } from "./helper";
 import { addProduct } from "../../../shared/fetch/fetch";
 import useAlert from "../../../hooks/useAlert";
+import useAuth from "../../../hooks/useAuth";
 
 const AdminAddProduct = () => {
   const [productForm, setProductForm] = useState<IProductInputForm>(
@@ -16,6 +17,7 @@ const AdminAddProduct = () => {
     initialProductInputError
   );
   const { showErrorMessage, showSuccessMessage } = useAlert();
+  const { verifySessionValidity } = useAuth();
 
   const handleTitleChange = (title: string) => {
     setProductForm({
@@ -77,12 +79,15 @@ const AdminAddProduct = () => {
           rating: +productForm.rating,
           creationDate: new Date().getTime(),
         };
-        const res = await addProduct(product);
-        if (res.type === MessageTypeEnum.SUCCESS) {
-          showSuccessMessage(res.message);
-          setProductFormError(initialProductInputError);
-          setProductForm(initialAdminProductForm);
-        } else showErrorMessage(res.message);
+        const accessToken = await verifySessionValidity();
+        if (accessToken) {
+          const res = await addProduct(product, accessToken as string);
+          if (res.type === MessageTypeEnum.SUCCESS) {
+            showSuccessMessage(res.message);
+            setProductFormError(initialProductInputError);
+            setProductForm(initialAdminProductForm);
+          } else showErrorMessage(res.message);
+        } else throw new Error("error");
       } catch {
         showErrorMessage("Product failed to be added. Try again");
       }

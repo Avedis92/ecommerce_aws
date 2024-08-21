@@ -10,13 +10,17 @@ import {
 } from "../types";
 
 export const addProduct = async (
-  product: IProduct
+  product: IProduct,
+  accessToken: string
 ): Promise<alertMessageType> => {
   const requestData: IRequestData = {
     endpoints: localEndpoints.products,
     path: "/add",
     method: "POST",
     body: JSON.stringify(product),
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
   };
   return fetch(processUrl(requestData), processOptions(requestData)).then(
     (res) => res.json()
