@@ -58,3 +58,8 @@ export const cartState = atom<ICart | null>({
   key: "cartState",
   default: null,
 });
+
+export const imageSourcesState = atom<string[] | null>({
+  key: "imageSourcesState",
+  default: null,
+});

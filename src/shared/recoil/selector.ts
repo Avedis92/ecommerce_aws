@@ -1,6 +1,6 @@
 import { selector, selectorFamily } from "recoil";
 import { IProduct, CategoryEnum, UserCartDetailsType } from "../types";
-import { cartState } from "./atom";
+import { cartState, imageSourcesState } from "./atom";
 import {
   getProductsByCategory,
   getProductById,
@@ -8,6 +8,10 @@ import {
 } from "../fetch/fetch";
 
 type HomepageProductsType = Record<string, IProduct[]>[];
+interface SalesBannerImageSourceType {
+  category: CategoryEnum;
+  url: string;
+}
 
 export const getProductsByCategorySelector = selectorFamily<
   IProduct[],
@@ -96,4 +100,48 @@ export const getAllProductsSelector = selector<IProduct[] | null>({
       return null;
     }
   },
+});
+
+export const imageSourceBannerUrlsSelector = selector<
+  SalesBannerImageSourceType[]
+>({
+  key: "imageSourceBannerUrlsSelector",
+  get: ({ get }) => {
+    const imageSources = get(imageSourcesState);
+    const s3baseUrl = import.meta.env["VITE_AWS_S3_BASE_URL"];
+    if (imageSources) {
+      return imageSources.map((is) => {
+        const obj: SalesBannerImageSourceType = {
+          category: CategoryEnum.PANTS,
+          url: "",
+        };
+        if (is.includes("pants")) {
+          (obj.category = CategoryEnum.PANTS), (obj.url = `${s3baseUrl}/${is}`);
+          return obj;
+        }
+        if (is.includes("shoes")) {
+          (obj.category = CategoryEnum.SHOES), (obj.url = `${s3baseUrl}/${is}`);
+          return obj;
+        }
+        (obj.category = CategoryEnum.SHIRTS), (obj.url = `${s3baseUrl}/${is}`);
+        return obj;
+      });
+    }
+    return [];
+  },
+});
+
+export const imageUrlSelectorFamily = selectorFamily<string, CategoryEnum>({
+  key: "imageUrlSelectorFamily",
+  get:
+    (category) =>
+    ({ get }) => {
+      const sources = get(imageSourceBannerUrlsSelector);
+      if (sources.length) {
+        const source = sources.find((s) => s.category === category);
+        if (source) return source.url;
+        return "";
+      }
+      return "";
+    },
 });
