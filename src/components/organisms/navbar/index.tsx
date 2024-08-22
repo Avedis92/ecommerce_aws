@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSetRecoilState, useRecoilState } from "recoil";
 import {
@@ -19,6 +19,7 @@ import {
   getSalesBannerImageSource,
 } from "../../../shared/fetch/fetch";
 import { getTotalProductCount } from "../../../shared/helpers";
+import HamburgerMenu from "../../molecules/hamburgerMenu";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -28,6 +29,7 @@ const Navbar = () => {
   const setCart = useSetRecoilState(cartState);
   const setImageSource = useSetRecoilState(imageSourcesState);
   const { pathname, showModal } = useNavbar();
+  const [windowSize, setWindowSize] = useState(1240);
 
   const handleSignIn = () => {
     navigate("/signIn");
@@ -46,8 +48,12 @@ const Navbar = () => {
     setImageSource(sources);
   };
 
+  const handleWindowSize = () => {
+    setWindowSize(window.innerWidth);
+  };
+
   useEffect(() => {
-    // window.addEventListener("resize", handleWindowSize);
+    window.addEventListener("resize", handleWindowSize);
     const loader = document.querySelector(
       ".appLoaderContainer"
     ) as HTMLDivElement;
@@ -56,7 +62,7 @@ const Navbar = () => {
     }
     getImageSource();
 
-    // return () => window.removeEventListener("resize", handleWindowSize);
+    return () => window.removeEventListener("resize", handleWindowSize);
   }, []);
 
   const updateCartInfo = async () => {
@@ -84,37 +90,43 @@ const Navbar = () => {
   }, [authUser]);
 
   return (
-    <nav className="flex justify-between items-center bg-white py-0 px-8">
+    <nav className="flex justify-between items-center bg-white py-0 px-8 xs-400:p-0">
       <NavLeftContent title="Men's Wear" />
-      <ProductNavigator />
-      <div className="flex items-center gap-x-8">
-        {authUser ? (
-          <UserSettings
-            authUserExtraInfo={authUser}
-            pathname={pathname}
-            handleSignOut={signOut}
-          />
-        ) : (
-          <button
-            className="py-4 px-2 w-24 bg-cyan-500 text-white font-bold 
+      {windowSize < 800 ? (
+        <HamburgerMenu />
+      ) : (
+        <>
+          <ProductNavigator />
+          <div className="flex items-center gap-x-8">
+            {authUser ? (
+              <UserSettings
+                authUserExtraInfo={authUser}
+                pathname={pathname}
+                handleSignOut={signOut}
+              />
+            ) : (
+              <button
+                className="py-4 px-2 w-24 bg-cyan-500 text-white font-bold 
           cursor-pointer text-xl border-none rounded-xl 
           transform transition duration-200 ease-in-out hover:scale-110 active:scale-90 "
-            onClick={handleSignIn}
-          >
-            Sign in
-          </button>
-        )}
-        <div className="relative cursor-pointer" onClick={navigateToCart}>
-          <FiShoppingCart size="2rem" />
-          <span
-            className="rounded-full text-white bg-red-600
+                onClick={handleSignIn}
+              >
+                Sign in
+              </button>
+            )}
+            <div className="relative cursor-pointer" onClick={navigateToCart}>
+              <FiShoppingCart size="2rem" />
+              <span
+                className="rounded-full text-white bg-red-600
           font-bold absolute right-0.5 w-5 h-5 inline-flex top-0
           justify-center items-center"
-          >
-            {cartCount}
-          </span>
-        </div>
-      </div>
+              >
+                {cartCount}
+              </span>
+            </div>
+          </div>
+        </>
+      )}
     </nav>
   );
 };

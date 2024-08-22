@@ -11,7 +11,9 @@ const SignUpModal = () => {
   };
   return (
     <div className="text-center">
-      <h1 className="mt-0 mb-5">You have successfully signed up</h1>
+      <h1 className="mt-0 mb-5 h1-custom-basic">
+        You have successfully signed up
+      </h1>
       <button
         className="border-none bg-red-600 text-white
         text-xl font-bold py-4 px-2 cursor-pointer

@@ -99,23 +99,6 @@ export interface IUser {
   username: string;
   isVerified: boolean;
 }
-
-/* export interface ICart {
-  id: string;
-  productId: string;
-  title: string;
-  unitPrice: number;
-  imageSource: string;
-  quantity: number;
-  totalPrice: number;
-  cartUpdateDate: number;
-  userId: User["uid"];
-} */
-
-export interface AuthUserExtraInfoType {
-  username: string;
-  isAdmin: boolean;
-}
 interface ISingUpUserProps {
   username: string;
   userSub: string;

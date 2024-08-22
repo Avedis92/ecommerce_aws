@@ -33,7 +33,7 @@ const VerifyEmailModal = () => {
   };
   return (
     <div className="text-center">
-      <h1 className="mt-0 mb-5">Verify your email</h1>
+      <h1 className="mt-0 mb-5 h1-custom-basic">Verify your email</h1>
       <Field
         labelName="Confirm password"
         type="text"

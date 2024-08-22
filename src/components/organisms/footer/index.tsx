@@ -6,9 +6,9 @@ import NavLeftContent from "../../molecules/navLeftContent";
 
 const Footer = () => {
   return (
-    <footer className="bg-white flex flex-col items-center justify-between py-8 px-0">
+    <footer className="bg-white flex flex-col items-center justify-between py-8 px-0 xs-400:items-start">
       <NavLeftContent title="Men's Wear" />
-      <ul className="list-none flex items-center gap-x-8 p-0 my-4">
+      <ul className="list-none flex items-center flex-wrap gap-x-8 p-0 my-4">
         <li className="cursor-pointer">Company</li>
         <li className="cursor-pointer">Products</li>
         <li className="cursor-pointer">Offices</li>

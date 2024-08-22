@@ -17,7 +17,9 @@ const HomeCollection = ({ title, products }: IHomeCollectionProps) => {
       {areProductsLoaded ? (
         <div className="text-center mb-16">
           {title && (
-            <h1 className="underline text-3xl font-bold mb-4">{title}</h1>
+            <h1 className="underline text-3xl font-bold mb-4 h1-custom-basic">
+              {title}
+            </h1>
           )}
           <div className="grid grid-cols-auto-fit-minmax-300 justify-items-center gap-y-8">
             {products.length > 0 &&
