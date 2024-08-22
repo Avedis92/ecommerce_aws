@@ -31,7 +31,9 @@ const SignOutModal = () => {
 
   return (
     <div className="text-center">
-      <h1 className="mt-0 mb-5">You have successfully signed out</h1>
+      <h1 className="mt-0 mb-5 h1-custom-basic">
+        You have successfully signed out
+      </h1>
     </div>
   );
 };

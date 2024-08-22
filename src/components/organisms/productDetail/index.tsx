@@ -28,8 +28,8 @@ const ProductDetail = (props: IProduct) => {
   }, []);
 
   return (
-    <div className="flex items-stretch gap-x-20 pl-8 mt-12 flex-wrap">
-      <div className="max-h-100 max-w-2/5 mt-5">
+    <div className="flex items-stretch gap-x-20 pl-8 mt-12 flex-wrap sm-930:justify-center">
+      <div className="max-h-100 max-w-2/5 mt-5 sm-930:max-w-4/5">
         <img
           src={imageSource}
           className="w-full max-h-full object-contain object-center"
@@ -47,7 +47,7 @@ const ProductDetail = (props: IProduct) => {
         <p>{description}</p>
         <div className="mb-4">
           <h2 className="text-2xl font-bold  mt-5 mx-0 mb-2 ">Select Size:</h2>
-          <div className="flex items-center gap-x-3 gap-y-3 flex-wrap">
+          <div className="flex items-center gap-x-3 gap-y-2 flex-wrap">
             {sizes.map((s, i) => (
               <button
                 className={
@@ -70,7 +70,7 @@ const ProductDetail = (props: IProduct) => {
         >
           Add to cart
         </button>
-        <p>Category: {category}</p>
+        <p className="my-4 text-lg font-semibold">Category: {category}</p>
       </div>
     </div>
   );

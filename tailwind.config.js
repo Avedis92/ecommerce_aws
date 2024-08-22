@@ -14,6 +14,7 @@ export default {
       },
       maxWidth: {
         "2/5": "40%",
+        "4/5": "80%",
       },
       gridTemplateColumns: {
         "auto-fit-minmax-300": "repeat(auto-fit, minmax(300px, 1fr))",
@@ -21,6 +22,11 @@ export default {
       minWidth: {
         110: "30rem",
         150: "40rem",
+      },
+      screens: {
+        "xs-400": { max: "400px" },
+        "sm-930": { max: "930px" },
+        "sm-550": { max: "550px" },
       },
     },
     keyframes: {
